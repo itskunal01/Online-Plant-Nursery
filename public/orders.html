@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders | Online Nursery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header section -->
+    <header>
+        <input type="checkbox" name="" id="toggler">
+        <label for="toggler" class="fas fa-bars"></label>
+        
+        <a href="/" class="logo">Online Nursery<span>.</span></a>
+        
+        <nav class="navbar">
+            <a href="/index.html">Home</a>
+            <a href="/index.html#about">About</a>
+            <a href="/product.html">Shop</a>
+            <a href="/orders.html">Orders</a>
+            <a href="/index.html#contact">Contact</a>
+        </nav>
+
+        <div class="icons">
+            <a href="wishlist.html" class="fas fa-heart"></a>
+            <a href="profile.html" class="fas fa-user"></a>
+            <a href="cart.html" class="fas fa-shopping-cart"></a>
+        </div>
+    </header>
+
+    <!-- Orders section -->
+    <section class="orders-section">
+        <h1 class="heading">My<span>Orders</span></h1>
+        
+        <div id="orders-list">
+            <!-- Orders will be loaded here -->
+        </div>
+    </section>
+
+    <script src="/cart.js"></script>
+    <script>
+        async function loadOrders() {
+            try {
+                const token = sessionStorage.getItem('token');
+                if (!token) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                const response = await fetch('/api/orders', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch orders');
+                }
+
+                const orders = await response.json();
+                const ordersList = document.getElementById('orders-list');
+
+                if (!orders || orders.length === 0) {
+                    ordersList.innerHTML = `
+                        <div class="empty-orders">
+                            <i class="fas fa-box-open"></i>
+                            <p>You haven't placed any orders yet.</p>
+                            <a href="/product.html" class="btn">Start Shopping</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                ordersList.innerHTML = orders.map(order => `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-info">
+                                <p class="order-date">Ordered on: ${new Date(order.created_at).toLocaleDateString()}</p>
+                            </div>
+                            <div class="order-status">
+                                <span class="status-badge ${order.status.toLowerCase()}">
+                                    ${order.status}
+                            </span>
+                            </div>
+                        </div>
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <img src="${item.image_url || '/images/default-plant.jpg'}" 
+                                         alt="${item.name}"
+                                         onerror="this.src='/images/default-plant.jpg'">
+                                    <div class="item-details">
+                                        <h4>${item.name}</h4>
+                                        <p class="item-price">₹${parseFloat(item.price).toFixed(2)} x ${item.quantity}</p>
+                                    </div>
+                                    <div class="item-total">₹${parseFloat(item.price * item.quantity).toFixed(2)}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="order-footer">
+                            <div class="delivery-info">
+                                <h4>Delivery Details</h4>
+                                <p class="delivery-address">${order.shipping_address}</p>
+                            </div>
+                            <div class="order-summary">
+                                <div class="total-items">Total Items: ${order.items.reduce((total, item) => total + item.quantity, 0)}</div>
+                                <div class="total-amount">Order Total: ₹${parseFloat(order.total_amount).toFixed(2)}</div>
+                                <div class="payment-method">Payment Method: ${order.payment_method}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                document.getElementById('orders-list').innerHTML = `
+                    <div class="empty-orders">
+                        <p>Error loading orders: ${error.message}</p>
+                        <button onclick="loadOrders()" class="btn">Try Again</button>
+                    </div>
+                `;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+</html> 

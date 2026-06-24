@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - Online Nursery</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Add this in the head section, after other style tags */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 60vh; /* Ensure minimum height for empty state */
+        }
+
+        .product-card {
+            max-width: 300px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            justify-self: center;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            height: 380px;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .product-card h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin: 1rem 0;
+        }
+
+        .product-card .price {
+            font-size: 1.6rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-actions {
+            margin-top: 0.5rem;
+            padding-top: 0;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.8rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: #45a049;
+        }
+
+        .product-icons {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+
+        .wishlist-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.6rem;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1.5rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Add these styles to your existing style section */
+        .empty-wishlist {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            width: 100%;
+            text-align: center;
+            grid-column: 1 / -1; /* Make it span all columns */
+        }
+
+        .empty-wishlist p {
+            font-size: 2rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .empty-wishlist .btn {
+            display: inline-block;
+            padding: 1rem 3rem;
+            font-size: 1.6rem;
+            background: #4CAF50;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .empty-wishlist .btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <input type="checkbox" name="" id="toggler">
+        <label for="toggler" class="fas fa-bars"></label>
+        
+        <a href="#" class="logo">Online Nursery<span>.</span></a>
+        
+        <nav class="navbar">
+            <a href="/index.html#home">Home</a>
+            <a href="/index.html#about">About</a>
+            <a href="/product.html">Shop</a>
+            <a href="/orders.html">Orders</a>
+            <a href="/index.html#contact">Contact</a>
+        </nav>
+
+        <div class="icons">
+            <a href="/wishlist.html" class="fas fa-heart" id="search-btn"></a>
+            <a href="profile.html" class="fas fa-user" id="login-btn"></a>
+            <a href="cart.html" class="fas fa-shopping-cart" id="cart-btn"></a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="product-container">
+        <h1 class="heading">My <span>Wishlist</span></h1>
+        
+        <!-- Wishlist Grid -->
+        <div class="product-grid" id="wishlist-grid">
+            <!-- Wishlisted products will be loaded here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <section class="footer">
+        <div class="box-container">
+            <div class="box">
+                <h3>Quick Links</h3>
+                <a href="/index.html#home">Home</a>
+                <a href="/index.html#about">About</a>
+                <a href="/product.html">Shop</a>
+                <a href="/index.html#contact">Contact</a>
+            </div>
+
+            <div class="box">
+                <h3>Extra Links</h3>
+                <a href="#">My account</a>
+                <a href="#">My orders</a>
+                <a href="#">Favourite</a>
+            </div>
+
+            <div class="box">
+                <h3>Locations</h3>
+                <a href="#">Pune</a>
+                <a href="#">Mumbai</a>
+                <a href="#">Nashik</a>
+            </div>
+            
+            <div class="box">
+                <h3>contacts</h3>
+                <a href="#">+91 1234567891</a>
+                <a href="#">evergreen12@gmail.com</a>
+                <a href="#">pune ,india -4110284</a>
+            </div>    
+        </div>
+    </section>
+
+    <script src="/cart.js"></script>
+    <script src="/wishlist.js"></script>
+    <script>
+        // Function to display wishlisted products
+        function displayWishlistItems() {
+            const wishlistGrid = document.getElementById('wishlist-grid');
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            if (wishlist.length === 0) {
+                wishlistGrid.innerHTML = `
+                    <div class="empty-wishlist">
+                        <p>Your wishlist is empty</p>
+                        <a href="/product.html" class="btn">Continue Shopping</a>
+                    </div>
+                `;
+                return;
+            }
+
+            wishlistGrid.innerHTML = wishlist.map(product => `
+                <div class="product-card">
+                    <div class="product-icons">
+                        <button class="wishlist-btn active" onclick="removeFromWishlist(${product.id}, this)">
+                            <i class="fas fa-heart" style="color: #ff4444;"></i>
+                        </button>
+                    </div>
+                    <img src="${product.image_url || '/images/placeholder.jpg'}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <span class="price">₹${Number(product.price).toFixed(2)}</span>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart(${product.id}, '${product.name}', ${product.price}, '${product.image_url}')">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Function to remove item from wishlist
+        function removeFromWishlist(productId, button) {
+            // Update both global and local wishlist
+            window.wishlist = window.wishlist.filter(item => item.id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(window.wishlist));
+            
+            // Remove the product card from display
+            button.closest('.product-card').remove();
+            
+            // Update the heart icon in nav bar
+            const wishlistBtn = document.getElementById('search-btn');
+            if (wishlistBtn) {
+                const count = window.wishlist.length;
+                if (count > 0) {
+                    wishlistBtn.setAttribute('data-count', count);
+                    wishlistBtn.style.color = '#ff4444';
+                } else {
+                    wishlistBtn.removeAttribute('data-count');
+                    wishlistBtn.style.color = '#666';
+                }
+            }
+            
+            // Show notification
+            showNotification('Product removed from wishlist!');
+            
+            // Check if wishlist is empty and refresh display if needed
+            if (window.wishlist.length === 0) {
+                displayWishlistItems();
+            }
+        }
+
+        // Load wishlist items when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize global wishlist
+            window.wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            displayWishlistItems();
+            updateCartCount();
+            updateWishlistCount();
+        });
+
+        // Check if user is logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = sessionStorage.getItem('token');
+            if (!token) {
+                // Clear cart/wishlist data if not logged in
+                localStorage.removeItem('cart');
+                localStorage.removeItem('cartCount');
+                localStorage.removeItem('wishlist');
+                localStorage.removeItem('wishlistCount');
+                
+                // Redirect to login page
+                window.location.href = 'login.html';
+            }
+        });
+    </script>
+</body>
+</html> 

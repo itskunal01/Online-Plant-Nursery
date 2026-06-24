@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Profile</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <!-- header section start -->
+    <header>
+        <input type="checkbox" name="" id="toggler">
+        <label for="toggler" class="fas fa-bars"></label>
+        
+        <a href="#" class="logo">Online Nursery<span>.</span></a>
+        
+        <nav class="navbar">
+            <a href="index.html">Home</a>
+            <a href="index.html#about">About</a>
+            <a href="/product.html">Shop</a>
+            <a href="/orders.html">Orders</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+
+        <div class="icons">
+            <a href="wishlist.html" class="fas fa-heart"></a>
+            <a href="profile.html" class="fas fa-user active"></a>
+            <a href="cart.html" class="fas fa-shopping-cart"></a>
+        </div>
+    </header>
+
+    <!-- Profile Section -->
+    <section class="profile-section">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-pic">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h2>My Profile</h2>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-group">
+                    <label>Name:</label>
+                    <p id="customerName">Loading...</p>
+                </div>
+                <div class="detail-group">
+                    <label>Email:</label>
+                    <p id="customerEmail">Loading...</p>
+                </div>
+                <div class="detail-group">
+                    <label>Phone:</label>
+                    <p id="customerPhone">Loading...</p>
+                </div>
+                <div class="detail-group">
+                    <label>Address:</label>
+                    <p id="customerAddress">Loading...</p>
+                </div>
+            </div>
+
+            <div class="profile-actions">
+                <a href="login.html" id="loginBtn" class="btn">Login</a>
+                <button id="logoutBtn" class="btn" style="display: none;">Logout</button>
+            </div>
+
+            <div class="quick-links">
+                <h3>Quick Links</h3>
+                <a href="orders.html"><i class="fas fa-box"></i> My Orders</a>
+                <a href="wishlist.html"><i class="fas fa-heart"></i> My Wishlist</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i> My Cart</a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .profile-section {
+            padding: 2rem;
+            margin-top: 7rem;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-pic {
+            font-size: 5rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .profile-header h2 {
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .profile-details {
+            margin: 2rem 0;
+        }
+
+        .detail-group {
+            display: flex;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 0.5rem;
+        }
+
+        .detail-group label {
+            font-weight: bold;
+            width: 120px;
+            color: #666;
+        }
+
+        .detail-group p {
+            color: #333;
+            margin: 0;
+        }
+
+        .profile-actions {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2.5rem;
+            background: var(--pink);
+            color: #333;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #4CAF50;
+        }
+
+        .quick-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+        }
+
+        .quick-links h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .quick-links a {
+            display: block;
+            padding: 0.8rem;
+            color: #666;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .quick-links a i {
+            margin-right: 0.5rem;
+        }
+
+        .quick-links a:hover {
+            color: var(--pink);
+            padding-left: 1.2rem;
+        }
+
+        .active {
+            color: var(--pink) !important;
+        }
+    </style>
+
+    <script>
+        // Check if user is logged in when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            const token = sessionStorage.getItem('token');
+
+            if (user && token) {
+                // User is logged in, display their data
+                document.getElementById('customerName').textContent = user.name;
+                document.getElementById('customerEmail').textContent = user.email;
+                document.getElementById('customerPhone').textContent = user.phone || 'Not provided';
+                document.getElementById('customerAddress').textContent = user.address || 'Not provided';
+                
+                // Show logout button, hide login button
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'inline-block';
+            } else {
+                // No user logged in, show default state
+                document.getElementById('customerName').textContent = 'Guest User';
+                document.getElementById('customerEmail').textContent = 'Not logged in';
+                document.getElementById('customerPhone').textContent = 'Not available';
+                document.getElementById('customerAddress').textContent = 'Not available';
+                
+                // Show login button, hide logout button
+                document.getElementById('loginBtn').style.display = 'inline-block';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+        });
+
+        // Handle logout
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Clear session storage
+            sessionStorage.removeItem('token');
+            sessionStorage.removeItem('user');
+            
+            // Clear cart data
+            localStorage.removeItem('cart');
+            localStorage.removeItem('cartCount');
+            
+            // Clear wishlist data
+            localStorage.removeItem('wishlist');
+            localStorage.removeItem('wishlistCount');
+            
+            // Redirect to login page
+            window.location.href = 'login.html';
+        });
+    </script>
+
+</body>
+</html> 

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Page</title>
+    <style>
+        body { 
+            padding: 20px; 
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .test-section { 
+            margin-bottom: 20px; 
+            padding: 20px; 
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button { 
+            padding: 10px 20px;
+            margin: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre { 
+            background: #f5f5f5; 
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .product-form {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .product-form input, .product-form select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Plant Shop API Test Page</h1>
+
+    <!-- Products Section -->
+    <div class="test-section">
+        <h2>Products API</h2>
+        <button onclick="getAllProducts()">Get All Products</button>
+        
+        <h3>Add New Product</h3>
+        <form class="product-form" onsubmit="addProduct(event)">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="text" id="productDescription" placeholder="Description" required>
+            <input type="number" id="productPrice" placeholder="Price" step="0.01" required>
+            <select id="productCategory" required>
+                <option value="indoor">Indoor</option>
+                <option value="outdoor">Outdoor</option>
+                <option value="flowering">Flowering</option>
+                <option value="equipment">Equipment</option>
+            </select>
+            <input type="text" id="productImage" placeholder="Image URL" required>
+            <input type="number" id="productStock" placeholder="Stock Quantity" required>
+            <button type="submit">Add Product</button>
+        </form>
+        
+        <pre id="productsResult"></pre>
+    </div>
+
+    <!-- Customers Section -->
+    <div class="test-section">
+        <h2>Customers API</h2>
+        <h3>Register New Customer</h3>
+        <form class="product-form" onsubmit="registerCustomer(event)">
+            <input type="text" id="customerName" placeholder="Name" required>
+            <input type="email" id="customerEmail" placeholder="Email" required>
+            <input type="password" id="customerPassword" placeholder="Password" required>
+            <input type="text" id="customerAddress" placeholder="Address" required>
+            <input type="tel" id="customerPhone" placeholder="Phone" required>
+            <button type="submit">Register Customer</button>
+        </form>
+        <pre id="customersResult"></pre>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="test-section">
+        <h2>Orders API</h2>
+        <button onclick="getAllOrders()">Get All Orders</button>
+        <h3>Create New Order</h3>
+        <form class="product-form" onsubmit="createOrder(event)">
+            <input type="number" id="customerId" placeholder="Customer ID" required>
+            <input type="number" id="orderTotal" placeholder="Total Amount" step="0.01" required>
+            <input type="text" id="shippingAddress" placeholder="Shipping Address" required>
+            <div id="orderItems">
+                <h4>Order Items</h4>
+                <input type="number" id="productId" placeholder="Product ID" required>
+                <input type="number" id="quantity" placeholder="Quantity" required>
+                <input type="number" id="itemPrice" placeholder="Price" step="0.01" required>
+            </div>
+            <button type="submit">Create Order</button>
+        </form>
+        <pre id="ordersResult"></pre>
+    </div>
+
+    <script>
+        const API_URL = '/api';
+
+        // Products API Tests
+        async function getAllProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                const data = await response.json();
+                document.getElementById('productsResult').textContent = 
+                    JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('productsResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        async function addProduct(event) {
+            event.preventDefault();
+            try {
+                const product = {
+                    name: document.getElementById('productName').value,
+                    description: document.getElementById('productDescription').value,
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    category: document.getElementById('productCategory').value,
+                    image_url: document.getElementById('productImage').value,
+                    stock_quantity: parseInt(document.getElementById('productStock').value)
+                };
+
+                const response = await fetch(`${API_URL}/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(product)
+                });
+
+                const data = await response.json();
+                document.getElementById('productsResult').innerHTML = 
+                    `<span class="success">Product added successfully!</span><br>` +
+                    JSON.stringify(data, null, 2);
+                
+                // Clear form
+                event.target.reset();
+            } catch (error) {
+                document.getElementById('productsResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        // Customers API Tests
+        async function registerCustomer(event) {
+            event.preventDefault();
+            try {
+                const customer = {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('customerEmail').value,
+                    password: document.getElementById('customerPassword').value,
+                    address: document.getElementById('customerAddress').value,
+                    phone: document.getElementById('customerPhone').value
+                };
+
+                const response = await fetch(`${API_URL}/customers/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(customer)
+                });
+
+                const data = await response.json();
+                document.getElementById('customersResult').innerHTML = 
+                    `<span class="success">Customer registered successfully!</span><br>` +
+                    JSON.stringify(data, null, 2);
+                
+                // Clear form
+                event.target.reset();
+            } catch (error) {
+                document.getElementById('customersResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        // Orders API Tests
+        async function createOrder(event) {
+            event.preventDefault();
+            try {
+                const order = {
+                    customer_id: parseInt(document.getElementById('customerId').value),
+                    total_amount: parseFloat(document.getElementById('orderTotal').value),
+                    shipping_address: document.getElementById('shippingAddress').value,
+                    items: [{
+                        product_id: parseInt(document.getElementById('productId').value),
+                        quantity: parseInt(document.getElementById('quantity').value),
+                        price: parseFloat(document.getElementById('itemPrice').value)
+                    }]
+                };
+
+                const response = await fetch(`${API_URL}/orders`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(order)
+                });
+
+                const data = await response.json();
+                document.getElementById('ordersResult').innerHTML = 
+                    `<span class="success">Order created successfully!</span><br>` +
+                    JSON.stringify(data, null, 2);
+                
+                // Clear form
+                event.target.reset();
+            } catch (error) {
+                document.getElementById('ordersResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        async function getAllOrders() {
+            try {
+                const response = await fetch(`${API_URL}/orders`);
+                const data = await response.json();
+                document.getElementById('ordersResult').textContent = 
+                    JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('ordersResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        // Add login function
+        async function login(event) {
+            event.preventDefault();
+            try {
+                const response = await fetch(`${API_URL}/customers/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('loginEmail').value,
+                        password: document.getElementById('loginPassword').value
+                    })
+                });
+                const data = await response.json();
+                if (data.token) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('customerId', data.customerId);
+                    showLoggedInState();
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+            }
+        }
+
+        // Add search function
+        async function searchProducts(event) {
+            event.preventDefault();
+            try {
+                const params = new URLSearchParams({
+                    query: document.getElementById('searchQuery').value,
+                    category: document.getElementById('filterCategory').value,
+                    minPrice: document.getElementById('minPrice').value,
+                    maxPrice: document.getElementById('maxPrice').value
+                });
+
+                const response = await fetch(`${API_URL}/products/search?${params}`);
+                const data = await response.json();
+                displayProducts(data);
+            } catch (error) {
+                console.error('Search error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 

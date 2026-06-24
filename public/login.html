@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Online Nursery</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body class="login-page">
+    <!-- Navigation Bar -->
+    <header>
+        <input type="checkbox" name="" id="toggler">
+        <label for="toggler" class="fas fa-bars"></label>
+        
+        <a href="#" class="logo">Online Nursery<span>.</span></a>
+        
+        <nav class="navbar">
+            <a href="/index.html#home">Home</a>
+            <a href="/index.html#about">About</a>
+            <a href="/product">Shop</a>
+            <a href="/orders.html">Orders</a>
+            <a href="/index.html#contact">Contact</a>
+        </nav>
+
+        <div class="icons">
+            <a href="wishlist.html" class="fas fa-heart" id="search-btn"></a>
+            <a href="login.html" class="fas fa-user" id="login-btn"></a>
+            <a href="cart.html" class="fas fa-shopping-cart" id="cart-btn"></a>
+        </div>
+    </header>
+
+    <!-- Login Form -->
+    <div class="form-structor">
+        <div class="signup">
+            <h2 class="form-title" id="signup"><span>or</span>Sign up</h2>
+            <div class="form-holder">
+                <input type="text" class="input" id="signup-name" placeholder="Name" />
+                <input type="email" class="input" id="signup-email" placeholder="Email" />
+                <input type="password" class="input" id="signup-password" placeholder="Password" />
+                <input type="text" class="input" id="signup-phone" placeholder="Phone (optional)" />
+                <input type="text" class="input" id="signup-address" placeholder="Address (optional)" />
+            </div>
+            <button class="submit-btn" onclick="handleSignup()">Sign up</button>
+        </div>
+        <div class="login slide-up">
+            <div class="center">
+                <h2 class="form-title" id="login"><span>or</span>Log in</h2>
+                <div class="form-holder">
+                    <input type="email" class="input" id="login-email" placeholder="Email" />
+                    <input type="password" class="input" id="login-password" placeholder="Password" />
+                </div>
+                <button class="submit-btn" onclick="handleLogin()">Log in</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="login.js"></script>
+    <script>
+        const loginBtn = document.getElementById('login');
+        const signupBtn = document.getElementById('signup');
+
+        loginBtn.addEventListener('click', (e) => {
+            let parent = e.target.parentNode.parentNode;
+            Array.from(e.target.parentNode.parentNode.classList).find((element) => {
+                if(element !== "slide-up") {
+                    parent.classList.add('slide-up');
+                } else {
+                    signupBtn.parentNode.classList.add('slide-up');
+                    parent.classList.remove('slide-up');
+                }
+            });
+        });
+
+        signupBtn.addEventListener('click', (e) => {
+            let parent = e.target.parentNode;
+            Array.from(e.target.parentNode.classList).find((element) => {
+                if(element !== "slide-up") {
+                    parent.classList.add('slide-up');
+                } else {
+                    loginBtn.parentNode.parentNode.classList.add('slide-up');
+                    parent.classList.remove('slide-up');
+                }
+            });
+        });
+
+        async function handleSignup() {
+            try {
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const phone = document.getElementById('signup-phone').value;
+                const address = document.getElementById('signup-address').value;
+
+                // Validate input
+                if (!name || !email || !password) {
+                    alert('All fields are required');
+                    return;
+                }
+
+                console.log('Sending registration request...', { name, email });
+
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password, phone, address })
+                });
+
+                const data = await response.json();
+                console.log('Registration response:', data);
+
+                if (!response.ok) {
+                    throw new Error(data.error || data.details || 'Registration failed');
+                }
+
+                // Store token and user info
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                alert('Registration successful!');
+                // Redirect to home page or dashboard
+                window.location.href = '/';
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert(`Registration failed: ${error.message}`);
+            }
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || 'Login failed');
+                }
+
+                // Store user data and token
+                sessionStorage.setItem('token', data.token);
+                sessionStorage.setItem('user', JSON.stringify(data.user));
+
+                // Redirect to profile page
+                window.location.href = 'profile.html';
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // Add form submit handler
+        document.querySelector('.login .submit-btn').addEventListener('click', handleLogin);
+    </script>
+</body>
+</html> 

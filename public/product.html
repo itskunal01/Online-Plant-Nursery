@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Plants & Accessories</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="/productDisplay.js" defer></script>
+    <script src="/cart.js" defer></script>
+    <link rel="stylesheet" href="/quick-view.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <input type="checkbox" name="" id="toggler">
+        <label for="toggler" class="fas fa-bars"></label>
+        
+        <a href="#" class="logo">Online Nursery<span>.</span></a>
+        
+        <nav class="navbar">
+            <a href="/index.html#home">Home</a>
+            <a href="/index.html#about">About</a>
+            <a href="/product">Shop</a>
+            <a href="/orders.html">Orders</a>
+            <a href="/index.html#contact">Contact</a>
+        </nav>
+
+        <div class="icons">
+            <a href="wishlist.html" class="fas fa-heart" id="search-btn"></a>
+            <a href="profile.html" class="fas fa-user" id="login-btn"></a>
+            <a href="cart.html" class="fas fa-shopping-cart" id="cart-btn"></a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="product-container">
+        <h1 class="heading">Our <span>Products</span></h1>
+        
+        <!-- Product Categories -->
+        <div class="categories">
+            <select id="category-filter" class="category-dropdown">
+                <option value="all">All Categories</option>
+                <option value="indoor">Indoor Plants</option>
+                <option value="outdoor">Outdoor Plants</option>
+                <option value="flowering">Flowering Plants</option>
+                <option value="equipment">Gardening Equipment</option>
+            </select>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid">
+            <!-- Products will be loaded dynamically here -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <section class="footer">
+        <div class="box-container">
+            <div class="box">
+                <h3>Quick Links</h3>
+                <a href="/index.html"#home>Home</a>
+                <a href="/index.html"#about>About</a>
+                <a href="/product.html">Shop</a>
+                <a href="#">Contact</a>
+            </div>
+
+            <div class="box">
+                <h3>Extra Links</h3>
+                <a href="/profile.html">My account</a>
+                <a href="/orders.html">My orders</a>
+                <a href="/wishlist.html">Favourite</a>
+            </div>
+
+            <div class="box">
+                <h3>Locations</h3>
+                <a href="#">Pune</a>
+                <a href="#">Mumbai</a>
+                <a href="#">Nashik</a>
+            </div>
+            
+            <div class="box">
+                <h3>contacts</h3>
+                <a href="#">+91 1234567891</a>
+                <a href="#">evergreen12@gmail.com</a>
+                <a href="#">pune ,india -4110284</a>
+            </div>    
+        </div>
+    </section>
+
+    <!-- Quick View Modal -->
+    <div id="quickViewModal" class="quick-view-modal">
+        <div class="quick-view-content">
+            <span class="close-modal">&times;</span>
+            <div class="quick-view-details">
+                <div class="quick-view-image">
+                    <img src="" alt="Product Image" id="modalProductImage">
+                </div>
+                <div class="quick-view-info">
+                    <h2 id="modalProductName"></h2>
+                    <p class="category">Category: <span id="modalProductCategory"></span></p>
+                    <p class="price">Price: ₹<span id="modalProductPrice"></span></p>
+                    <p class="stock">Stock: <span id="modalProductStock"></span></p>
+                    <p class="description"><strong>Description:</strong><br><span id="modalProductDescription"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/quick-view.js"></script>  
+    <script src="/productDisplay.js"></script>
+    <script src="/cart.js"></script>
+    <script src="/wishlist.js"></script>
+
+    <script>
+        // Update cart count when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html> 
